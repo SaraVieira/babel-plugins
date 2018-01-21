@@ -9,7 +9,7 @@ module.exports = {
   Query: {
     plugins: (
       _,
-      { name = null, official = null, minScore = 0, version = 'latest' }
+      { name = null, official = null, minScore = 0, version }
     ) => {
       let plugins
       if (!name) {
@@ -42,7 +42,7 @@ module.exports = {
           p
             .map(p => ({
               ...p,
-              bundled: `https://bundle.run/${p.package.name}@${version}`
+              bundled: `https://bundle.run/${p.package.name}@${version || p.package.version}`
             }))
             .filter(p => p.score.final >= minScore)
         )
