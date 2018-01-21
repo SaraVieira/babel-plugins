@@ -5,7 +5,8 @@ module.exports = `
         version: String,
         name: String,
         official: Boolean,
-        minScore: Float
+		minScore: Float
+		babelWebsite: Boolean
     ): [Plugin]
   }
 
