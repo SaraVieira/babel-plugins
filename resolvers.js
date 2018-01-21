@@ -9,7 +9,7 @@ module.exports = {
   Query: {
     plugins: (
       _,
-      { name = null, scope = null, minScore = 0, version = 'latest' }
+      { name = null, official = null, minScore = 0, version = 'latest' }
     ) => {
       let plugins
       if (!name) {
@@ -22,6 +22,20 @@ module.exports = {
         )
       }
 
+      if (official) {
+        plugins = axios(`${endpoint}+@babel`).then(rsp =>
+          getResults(rsp)
+        ).then(p =>
+          p
+            .map(p => ({
+              ...p,
+              package: {
+                ...p.package,
+                scope: `@babel`
+              }
+            })))
+      }
+
       return plugins
         .then(rsp => rsp.sort((a, b) => b.searchScore - a.searchScore))
         .then(p =>
@@ -30,7 +44,6 @@ module.exports = {
               ...p,
               bundled: `https://bundle.run/${p.package.name}@${version}`
             }))
-            .filter(p => scope ? p.package.scope.includes('@babel/') : true)
             .filter(p => p.score.final >= minScore)
         )
     }
