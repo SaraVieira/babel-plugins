@@ -59,9 +59,10 @@ module.exports = `
 
 
   type Plugin {
+	  id: String
       package: Package
       score: Score
-      searchScore: Float,
+      searchScore: Float
       bundled: String
   }
 `
