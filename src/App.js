@@ -1,35 +1,22 @@
 import React from "react"
-import { graphql } from "react-apollo"
-import gql from "graphql-tag"
+import { Flex, Heading, PanelFooter, Container, Box } from "rebass"
 
-const App = ({ plugins, loading }) => (
-	<div className="App">
-		<header className="App-header">
-			<h1 className="App-title">Welcome to Babel Plugins</h1>
-		</header>
-		<ul>
-		{loading && 'loading'}
-			{plugins &&
-				plugins.map(plugin => <li key={plugin.id}>{plugin.package.name}</li>)}
-		</ul>
-	</div>
+import Sidebar from "./sidebar"
+import Plugins from "./packages"
+
+export default () => (
+	<Container>
+		<Box p={4}>
+			<Heading style={{ textAlign: "center" }}> Babel Plugins </Heading>
+		</Box>
+		<Flex>
+			<Flex column style={{ flexShrink: 0 }} pr={4}>
+				<Sidebar />
+			</Flex>
+			<Flex wrap>
+				<Plugins />
+			</Flex>
+		</Flex>
+		<PanelFooter>Footer</PanelFooter>
+	</Container>
 )
-
-export default graphql(
-	gql`
-		query PluginsQuery {
-			plugins {
-				id
-				package {
-					name
-				}
-			}
-		}
-	`,
-	{
-		props: ({ ownProps, data: { loading, plugins } }) => ({
-			loading,
-			plugins,
-		}),
-	}
-)(App)
