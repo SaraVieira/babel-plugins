@@ -30,22 +30,6 @@ module.exports = {
         ).then(rsp => getResults(rsp))
       }
 
-      if (official) {
-        plugins = axios(
-          `https://api.npms.io/v2/search?q=babel+plugin++@babel&size=250`
-        )
-          .then(rsp => getResults(rsp))
-          .then(p =>
-            p.map(p => ({
-              ...p,
-              package: {
-                ...p.package,
-                scope: `@babel`
-              }
-            }))
-          )
-      }
-
       return plugins
         .then(rsp => rsp.sort((a, b) => b.searchScore - a.searchScore))
         .then(p =>
@@ -60,6 +44,10 @@ module.exports = {
             .filter(
               p =>
                 babelWebsite ? !p.package.name.includes('plugin-syntax') : true
+            )
+            .filter(
+              p =>
+                official ? p.package.name.includes('@babel/') : true
             )
         )
     }
